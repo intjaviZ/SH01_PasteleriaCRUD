@@ -8,6 +8,7 @@ import com.javiviz.sh01_pasteleriacrud.core.storage.SessionStorage
 import com.javiviz.sh01_pasteleriacrud.core.storage.sessionDataStore
 import com.javiviz.sh01_pasteleriacrud.features.catalogo.di.CatalogoModule
 import com.javiviz.sh01_pasteleriacrud.features.login.di.LoginModule
+import com.javiviz.sh01_pasteleriacrud.features.main.di.MainModule
 import com.javiviz.sh01_pasteleriacrud.features.pedidos.di.PedidosModule
 import com.javiviz.sh01_pasteleriacrud.features.reportes.di.ReportesModule
 import com.javiviz.sh01_pasteleriacrud.features.signup.di.SignupModule
@@ -20,7 +21,7 @@ class AppModule(context: Context) {
     private val appContext = context.applicationContext
 
     // 10.0.2.2 = localhost de tu PC visto desde el emulador. Debe terminar en "/".
-    private val baseUrl = "http://10.0.2.2:3000/api/v1/"
+    private val baseUrl = "https://100-62-219-231.sslip.io/api/v1/"
 
     val json: Json by lazy {
         Json {
@@ -39,6 +40,7 @@ class AppModule(context: Context) {
         RetrofitFactory.create(baseUrl, json, sessionStorage)
     }
 
+    val mainModule: MainModule by lazy { MainModule(this) }
     val loginModule: LoginModule by lazy { LoginModule(this) }
     val signupModule: SignupModule by lazy { SignupModule(this) }
     val catalogoModule: CatalogoModule by lazy { CatalogoModule(this) }

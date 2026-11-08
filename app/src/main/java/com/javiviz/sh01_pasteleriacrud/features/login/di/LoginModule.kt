@@ -6,6 +6,7 @@ import com.javiviz.sh01_pasteleriacrud.features.login.data.datasource.LoginRemot
 import com.javiviz.sh01_pasteleriacrud.features.login.data.datasource.LoginRemoteDataSourceImpl
 import com.javiviz.sh01_pasteleriacrud.features.login.data.repository.LoginRepository
 import com.javiviz.sh01_pasteleriacrud.features.login.data.repository.LoginRepositoryImpl
+import com.javiviz.sh01_pasteleriacrud.features.login.presentation.viewModel.LoginViewModelFactory
 
 /** DI manual con Factory Method: cada create...() sabe armar una pieza. */
 class LoginModule(private val appModule: AppModule) {
@@ -21,6 +22,7 @@ class LoginModule(private val appModule: AppModule) {
 
     val repository: LoginRepository by lazy { createRepository() }
 
-    // Cuando exista el ViewModel:
-    // fun createViewModelFactory(): LoginViewModelFactory = LoginViewModelFactory(repository)
+    fun createViewModelFactory(): LoginViewModelFactory = LoginViewModelFactory(repository)
+
+    val viewModelFactory: LoginViewModelFactory by lazy { createViewModelFactory() }
 }

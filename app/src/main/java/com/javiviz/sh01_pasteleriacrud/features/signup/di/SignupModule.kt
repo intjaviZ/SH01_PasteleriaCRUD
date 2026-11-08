@@ -6,6 +6,7 @@ import com.javiviz.sh01_pasteleriacrud.features.signup.data.datasource.SignupRem
 import com.javiviz.sh01_pasteleriacrud.features.signup.data.datasource.SignupRemoteDataSourceImpl
 import com.javiviz.sh01_pasteleriacrud.features.signup.data.repository.SignupRepository
 import com.javiviz.sh01_pasteleriacrud.features.signup.data.repository.SignupRepositoryImpl
+import com.javiviz.sh01_pasteleriacrud.features.signup.presentation.viewModel.SignupViewModelFactory
 
 class SignupModule(private val appModule: AppModule) {
 
@@ -20,6 +21,7 @@ class SignupModule(private val appModule: AppModule) {
 
     val repository: SignupRepository by lazy { createRepository() }
 
-    // Cuando exista el ViewModel:
-    // fun createViewModelFactory(): SignupViewModelFactory = SignupViewModelFactory(repository)
+    fun createViewModelFactory(): SignupViewModelFactory = SignupViewModelFactory(repository)
+
+    val viewModelFactory: SignupViewModelFactory by lazy { createViewModelFactory() }
 }

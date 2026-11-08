@@ -5,11 +5,6 @@ import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
 
-/**
- * Agrega "Authorization: Bearer <token>" a todas las peticiones excepto /auth/*
- * (login y registro son públicos). OkHttp ejecuta esto en un hilo de red,
- * por eso runBlocking es aceptable aquí.
- */
 class AuthInterceptor(private val tokenProvider: TokenProvider) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
