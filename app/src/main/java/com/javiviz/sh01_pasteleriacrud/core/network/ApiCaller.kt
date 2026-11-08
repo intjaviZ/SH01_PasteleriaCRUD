@@ -38,6 +38,7 @@ class ApiCaller(private val json: Json) {
             codigo == "CREDENCIALES_INVALIDAS" -> DomainError.CredencialesInvalidas
             codigo == "EMAIL_DUPLICADO" -> DomainError.EmailDuplicado
             codigo == "PASSWORD_DEBIL" -> DomainError.PasswordDebil
+            codigo == "TRANSICION_INVALIDA" -> DomainError.TransicionInvalida(mensaje)
             e.code() == 401 -> DomainError.NoAutenticado
             e.code() == 403 -> DomainError.SinPermiso
             e.code() == 404 -> DomainError.NoEncontrado

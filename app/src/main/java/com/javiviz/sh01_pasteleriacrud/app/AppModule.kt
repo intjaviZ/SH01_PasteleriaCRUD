@@ -6,7 +6,10 @@ import com.javiviz.sh01_pasteleriacrud.core.network.RetrofitFactory
 import com.javiviz.sh01_pasteleriacrud.core.storage.DataStoreSessionStorage
 import com.javiviz.sh01_pasteleriacrud.core.storage.SessionStorage
 import com.javiviz.sh01_pasteleriacrud.core.storage.sessionDataStore
+import com.javiviz.sh01_pasteleriacrud.features.catalogo.di.CatalogoModule
 import com.javiviz.sh01_pasteleriacrud.features.login.di.LoginModule
+import com.javiviz.sh01_pasteleriacrud.features.pedidos.di.PedidosModule
+import com.javiviz.sh01_pasteleriacrud.features.reportes.di.ReportesModule
 import com.javiviz.sh01_pasteleriacrud.features.signup.di.SignupModule
 import kotlinx.serialization.json.Json
 import retrofit2.Retrofit
@@ -38,4 +41,7 @@ class AppModule(context: Context) {
 
     val loginModule: LoginModule by lazy { LoginModule(this) }
     val signupModule: SignupModule by lazy { SignupModule(this) }
+    val catalogoModule: CatalogoModule by lazy { CatalogoModule(this) }
+    val pedidosModule: PedidosModule by lazy { PedidosModule(this) }
+    val reportesModule: ReportesModule by lazy { ReportesModule(this) }
 }

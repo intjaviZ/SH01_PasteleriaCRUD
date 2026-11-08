@@ -13,6 +13,9 @@ sealed class DomainError(override val message: String) : Exception(message) {
     data object EmailDuplicado : DomainError("Ya existe una cuenta con ese email.")
     data object PasswordDebil : DomainError("La contraseña debe tener al menos 8 caracteres.")
 
+    /** 409: el pedido no puede pasar a ese estado desde el actual. */
+    data class TransicionInvalida(val detalle: String) : DomainError(detalle)
+
     /** 400 / 422 que no tienen un tipo propio todavía. */
     data class SolicitudInvalida(
         val codigo: String?,
