@@ -6,6 +6,7 @@ import com.javiviz.sh01_pasteleriacrud.features.catalogo.data.datasource.Catalog
 import com.javiviz.sh01_pasteleriacrud.features.catalogo.data.datasource.CatalogoRemoteDataSourceImpl
 import com.javiviz.sh01_pasteleriacrud.features.catalogo.data.repository.CatalogoRepository
 import com.javiviz.sh01_pasteleriacrud.features.catalogo.data.repository.CatalogoRepositoryImpl
+import com.javiviz.sh01_pasteleriacrud.features.catalogo.presentation.viewModel.CatalogoViewModelFactory
 
 class CatalogoModule(private val appModule: AppModule) {
 
@@ -19,4 +20,8 @@ class CatalogoModule(private val appModule: AppModule) {
         CatalogoRepositoryImpl(createRemoteDataSource())
 
     val repository: CatalogoRepository by lazy { createRepository() }
+
+    fun createViewModelFactory(): CatalogoViewModelFactory = CatalogoViewModelFactory(repository)
+
+    val viewModelFactory: CatalogoViewModelFactory by lazy { createViewModelFactory() }
 }

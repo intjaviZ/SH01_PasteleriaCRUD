@@ -1,6 +1,8 @@
 package com.javiviz.sh01_pasteleriacrud.features.main.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -8,13 +10,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.javiviz.sh01_pasteleriacrud.core.model.Usuario
+import com.javiviz.sh01_pasteleriacrud.features.catalogo.presentation.screens.CatalogoScreen
 import com.javiviz.sh01_pasteleriacrud.features.main.presentation.components.RutaProtegida
 import com.javiviz.sh01_pasteleriacrud.features.main.presentation.screens.PantallaPendienteScreen
+import com.javiviz.sh01_pasteleriacrud.features.pedidos.presentation.screens.NuevoPedidoScreen
+import com.javiviz.sh01_pasteleriacrud.features.pedidos.presentation.screens.PedidoDetalleScreen
+import com.javiviz.sh01_pasteleriacrud.features.pedidos.presentation.screens.PedidosScreen
 
 /**
  * NavHost interno de MainScreen. Cada ruta pasa por RutaProtegida, que revisa el Rol.
- * Las pantallas reales aún no existen: cada una usa PantallaPendienteScreen.
- * Cuando las crees, reemplaza solo la línea marcada con TODO.
+ * Pendiente: reportes (sigue usando PantallaPendienteScreen).
  */
 @Composable
 fun MainNavHost(
@@ -34,20 +39,41 @@ fun MainNavHost(
     ) {
         composable(Rutas.CATALOGO) {
             RutaProtegida(Destinos.Catalogo, rol, volverAInicio) {
-                PantallaPendienteScreen("Catálogo") // TODO: CatalogoScreen()
+                CatalogoScreen(
+                    rol = rol,
+                    onHacerPedido = { navController.navigate(Rutas.NUEVO_PEDIDO) }
+                )
             }
         }
 
-        composable(Rutas.PEDIDOS) {
+        composable(Rutas.PEDIDOS) { entry ->
+            // Otras pantallas dejan aquí una marca cuando modifican un pedido; la lista la lee y se recarga.
+            val refrescar by entry.savedStateHandle
+                .getStateFlow(Rutas.CLAVE_REFRESCAR_PEDIDOS, false)
+                .collectAsState()
+
             RutaProtegida(Destinos.Pedidos, rol, volverAInicio) {
-                // TODO: PedidosScreen(onPedidoClick = { id -> navController.navigate(Rutas.detallePedido(id)) })
-                PantallaPendienteScreen("Lista de pedidos")
+                PedidosScreen(
+                    rol = rol,
+                    refrescar = refrescar,
+                    onRefrescado = { entry.savedStateHandle[Rutas.CLAVE_REFRESCAR_PEDIDOS] = false },
+                    onPedidoClick = { id -> navController.navigate(Rutas.detallePedido(id)) },
+                    onNuevoPedido = { navController.navigate(Rutas.NUEVO_PEDIDO) }
+                )
             }
         }
 
         composable(Rutas.NUEVO_PEDIDO) {
             RutaProtegida(Destinos.NuevoPedido, rol, volverAInicio) {
-                PantallaPendienteScreen("Crear pedido") // TODO: NuevoPedidoScreen()
+                NuevoPedidoScreen(
+                    onPedidoCreado = { id ->
+                        navController.marcarPedidosParaRefrescar()
+                        // El formulario sale del historial: al volver desde el detalle no reaparece.
+                        navController.navigate(Rutas.detallePedido(id)) {
+                            popUpTo(Rutas.NUEVO_PEDIDO) { inclusive = true }
+                        }
+                    }
+                )
             }
         }
 
@@ -57,7 +83,11 @@ fun MainNavHost(
         ) { entry ->
             val pedidoId = entry.arguments?.getInt(Rutas.ARG_PEDIDO_ID) ?: -1
             RutaProtegida(Destinos.DetallePedido, rol, volverAInicio) {
-                PantallaPendienteScreen("Detalle del pedido #$pedidoId") // TODO: DetallePedidoScreen(pedidoId)
+                PedidoDetalleScreen(
+                    pedidoId = pedidoId,
+                    rol = rol,
+                    onPedidoModificado = { navController.marcarPedidosParaRefrescar() }
+                )
             }
         }
 
@@ -66,5 +96,12 @@ fun MainNavHost(
                 PantallaPendienteScreen("Reportes de ventas") // TODO: ReportesScreen()
             }
         }
+    }
+}
+
+/** Si la lista de pedidos no está en el historial, no hay nada que refrescar. */
+private fun NavHostController.marcarPedidosParaRefrescar() {
+    runCatching {
+        getBackStackEntry(Rutas.PEDIDOS).savedStateHandle[Rutas.CLAVE_REFRESCAR_PEDIDOS] = true
     }
 }

@@ -22,4 +22,7 @@ object Rutas {
     const val ARG_PEDIDO_ID = "pedidoId"
     const val DETALLE_PEDIDO_PATRON = "pedido_detalle/{pedidoId}"
     fun detallePedido(id: Int) = "pedido_detalle/$id"
+
+    /** Clave en el SavedStateHandle de la lista de pedidos: "algo cambió, recárgate". */
+    const val CLAVE_REFRESCAR_PEDIDOS = "refrescar_pedidos"
 }
