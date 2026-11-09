@@ -1,5 +1,6 @@
 package com.javiviz.sh01_pasteleriacrud.features.catalogo.presentation.screens
 
+import androidx.compose.material3.AlertDialog
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Arrangement
@@ -10,9 +11,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
@@ -42,6 +47,7 @@ fun CatalogoScreen(
     )
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    var mostrarDialogo by remember { mutableStateOf(true) }
     val error = uiState.error
 
     when {
@@ -54,7 +60,20 @@ fun CatalogoScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 uiState.config?.let { config ->
-                    item { TamanosCard(config) }
+                    item {
+                        if (mostrarDialogo) {
+                            AlertDialog(
+                                onDismissRequest = { mostrarDialogo = false },
+                                title = { Text(text = "Cómo pedir", style = MaterialTheme.typography.titleMedium) },
+                                text = { TamanosCard(config = uiState.config!!) },
+                                confirmButton = {
+                                    TextButton ( onClick = { mostrarDialogo = false } ) {
+                                        Text("Entendido")
+                                    }
+                                }
+                            )
+                        }
+                    }
                 }
 
                 item { Text(text = "Pasteles", style = MaterialTheme.typography.titleLarge) }
@@ -62,15 +81,6 @@ fun CatalogoScreen(
 
                 item { RellenosSeccion(uiState.rellenos) }
 
-                if (rol == Rol.REPOSTERA) {
-                    item {
-                        Text(
-                            text = "Vista de consulta: los clientes eligen de este catálogo al hacer su pedido.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
             }
 
             if (rol == Rol.CLIENTE) {

@@ -16,12 +16,9 @@ import com.javiviz.sh01_pasteleriacrud.features.catalogo.data.model.Configuracio
 /** Resume las reglas de tamaño que valida la API, para que el usuario las conozca antes de pedir. */
 @Composable
 fun TamanosCard(config: ConfiguracionTamanos, modifier: Modifier = Modifier) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer)
-    ) {
+
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(text = "Cómo pedir", style = MaterialTheme.typography.titleMedium)
+
             Text(
                 text = "Porciones: de ${config.porcionesMinimas} a ${config.porcionesMaximas}, de ${config.multiplo} en ${config.multiplo}.",
                 style = MaterialTheme.typography.bodyMedium
@@ -39,5 +36,5 @@ fun TamanosCard(config: ConfiguracionTamanos, modifier: Modifier = Modifier) {
                 style = MaterialTheme.typography.bodyMedium
             )
         }
-    }
+
 }
