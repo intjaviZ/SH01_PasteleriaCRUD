@@ -6,6 +6,7 @@ import com.javiviz.sh01_pasteleriacrud.features.reportes.data.datasource.Reporte
 import com.javiviz.sh01_pasteleriacrud.features.reportes.data.datasource.ReportesRemoteDataSourceImpl
 import com.javiviz.sh01_pasteleriacrud.features.reportes.data.repository.ReportesRepository
 import com.javiviz.sh01_pasteleriacrud.features.reportes.data.repository.ReportesRepositoryImpl
+import com.javiviz.sh01_pasteleriacrud.features.reportes.presentation.viewModel.ReportesViewModelFactory
 
 class ReportesModule(private val appModule: AppModule) {
 
@@ -19,4 +20,8 @@ class ReportesModule(private val appModule: AppModule) {
         ReportesRepositoryImpl(createRemoteDataSource())
 
     val repository: ReportesRepository by lazy { createRepository() }
+
+    fun createViewModelFactory(): ReportesViewModelFactory = ReportesViewModelFactory(repository)
+
+    val viewModelFactory: ReportesViewModelFactory by lazy { createViewModelFactory() }
 }

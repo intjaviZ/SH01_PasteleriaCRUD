@@ -12,14 +12,13 @@ import androidx.navigation.navArgument
 import com.javiviz.sh01_pasteleriacrud.core.model.Usuario
 import com.javiviz.sh01_pasteleriacrud.features.catalogo.presentation.screens.CatalogoScreen
 import com.javiviz.sh01_pasteleriacrud.features.main.presentation.components.RutaProtegida
-import com.javiviz.sh01_pasteleriacrud.features.main.presentation.screens.PantallaPendienteScreen
 import com.javiviz.sh01_pasteleriacrud.features.pedidos.presentation.screens.NuevoPedidoScreen
 import com.javiviz.sh01_pasteleriacrud.features.pedidos.presentation.screens.PedidoDetalleScreen
 import com.javiviz.sh01_pasteleriacrud.features.pedidos.presentation.screens.PedidosScreen
+import com.javiviz.sh01_pasteleriacrud.features.reportes.presentation.screens.ReportesScreen
 
 /**
  * NavHost interno de MainScreen. Cada ruta pasa por RutaProtegida, que revisa el Rol.
- * Pendiente: reportes (sigue usando PantallaPendienteScreen).
  */
 @Composable
 fun MainNavHost(
@@ -93,7 +92,7 @@ fun MainNavHost(
 
         composable(Rutas.REPORTES) {
             RutaProtegida(Destinos.Reportes, rol, volverAInicio) {
-                PantallaPendienteScreen("Reportes de ventas") // TODO: ReportesScreen()
+                ReportesScreen()
             }
         }
     }
